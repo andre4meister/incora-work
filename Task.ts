@@ -6,8 +6,8 @@ export class Task implements ITask {
   compeleted: boolean;
   developer: IUser;
 
-  constructor(id: number, durationInMin: number, compeleted: boolean, developer: IUser) {
-    this.id = id;
+  constructor(durationInMin: number, compeleted: boolean, developer: IUser) {
+    this.id = Math.floor(Math.random() * 1000);
     this.durationInMin = durationInMin;
     this.compeleted = compeleted;
     this.developer = developer;

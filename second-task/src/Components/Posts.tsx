@@ -1,8 +1,12 @@
 import { FC } from "react";
 import "../Styles/App.css";
-
+interface Post {
+  id: number;
+  title: string;
+  body: string;
+}
 interface PostsProps {
-  posts: any[];
+  posts: Post[];
 }
 const Posts: FC<PostsProps> = ({ posts }) => {
   return (

@@ -1,21 +1,21 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import "../Styles/App.css";
 import Pagination from "./Pagination";
 import Posts from "./Posts";
 import Settings from "./Settings";
+import { fetchPosts } from "../index";
 
-const styles = {
-  btn: `btn`,
-  activeBtn: `activeBtn`
-};
-
-interface Todo {
+export interface Todo {
   userId: number;
   id: number;
   title: string;
   body: string;
 }
+
+const classesForPages = {
+  btn: "btn",
+  activeBtn: "activeBtn"
+};
 
 function App() {
   const onChangePage = (page: number) => {
@@ -24,18 +24,11 @@ function App() {
 
   const [activePage, setActivePage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(9);
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<Todo[]>([]);
   const [totalItems, setTotalItems] = useState<number>(0);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      const res = await axios.get(`https://jsonplaceholder.typicode.com/posts?page=${activePage}`);
-      setPosts(
-        res.data.filter((todo: Todo) => todo.id > (activePage - 1) * perPage && todo.id <= activePage * perPage)
-      );
-      setTotalItems(res.data.length);
-    };
-    fetchPosts();
+    fetchPosts(activePage, perPage, setPosts, setTotalItems);
   }, [activePage, perPage]);
 
   return (
@@ -46,7 +39,7 @@ function App() {
         totalItems={totalItems}
         perPage={perPage}
         onChangePage={onChangePage}
-        classes={styles}
+        classes={classesForPages}
         withActions={true}
       />
       <Posts posts={posts} />

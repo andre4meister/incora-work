@@ -13,10 +13,9 @@ interface IPage {
 }
 
 const Page: FC<IPage> = ({ page, onChangePage, activePage, classes }) => {
-  console.log(classes);
   return (
     <li
-      className={classNames(activePage === page ? classes?.activeBtn : classes?.btn, "paginator-btn")}
+      className={classNames("default", activePage === page ? classes?.activeBtn : classes?.btn)}
       onClick={() => onChangePage(page)}>
       {page}
     </li>

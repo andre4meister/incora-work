@@ -24,11 +24,11 @@ const Pagination: FC<PaginationProps> = ({ activePage, perPage, totalItems, onCh
   ));
 
   return (
-    <ul className='flex-ul'>
-      {withActions && realActivePage > 1 && <li onClick={() => onChangePage(realActivePage - 1)}>Previous</li>}
+    <ul className='flex-ul pagination'>
+      {withActions && realActivePage > 1 && <li className="page-item" onClick={() => onChangePage(realActivePage - 1)}>Previous</li>}
       {numbersForUl}
       {withActions && realActivePage < totalItems / perPage && (
-        <li onClick={() => onChangePage(realActivePage + 1)}>Next</li>
+        <li className="page-item" onClick={() => onChangePage(realActivePage + 1)}>Next</li>
       )}
     </ul>
   );

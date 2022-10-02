@@ -1,5 +1,5 @@
 import { FC } from "react";
-import "../Styles/App.css";
+import "../Styles/App.scss";
 
 interface PostsProps {
   posts: any[];

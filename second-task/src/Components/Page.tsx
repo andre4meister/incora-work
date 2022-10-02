@@ -1,5 +1,5 @@
 import { FC } from "react";
-import "../Styles/App.css";
+import "../Styles/App.scss";
 import classNames from "classnames";
 
 interface IPage {
@@ -13,10 +13,9 @@ interface IPage {
 }
 
 const Page: FC<IPage> = ({ page, onChangePage, activePage, classes }) => {
-  console.log(classes);
   return (
     <li
-      className={classNames(activePage === page ? classes?.activeBtn : classes?.btn, "paginator-btn")}
+      className={classNames(activePage === page ? classes?.activeBtn : classes?.btn, 'page-item')}
       onClick={() => onChangePage(page)}>
       {page}
     </li>

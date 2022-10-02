@@ -1,5 +1,6 @@
 import { FC } from "react";
 import Page from "./Page";
+import classNames from "classnames";
 
 export interface PaginationProps {
   activePage?: number;
@@ -13,23 +14,40 @@ export interface PaginationProps {
   onChangePage: (newPage: number) => void;
 }
 
-const Pagination: FC<PaginationProps> = ({ activePage, perPage, totalItems, onChangePage, classes, withActions }) => {
-  const realActivePage: number = activePage !== undefined ? activePage : 1;
+const Pagination: FC<PaginationProps> = ({
+  activePage = 1,
+  perPage,
+  totalItems,
+  onChangePage,
+  classes = { btn: "btn", activeBtn: "activeBtn" },
+  withActions = true
+}) => {
   const arrayNumber: number[] = [];
   for (let i = 1; i <= Math.ceil(totalItems / perPage); i++) {
     arrayNumber.push(i);
   }
+
   const numbersForUl = arrayNumber.map((page) => (
     <Page page={page} key={page} activePage={activePage} classes={classes} onChangePage={onChangePage} />
   ));
 
   return (
-    <ul className='flex-ul pagination'>
-      {withActions && realActivePage > 1 && <li className="page-item" onClick={() => onChangePage(realActivePage - 1)}>Previous</li>}
+    <ul className='justify-content-center pagination'>
+      <li className={classNames("page-item",
+          {
+            'disabled': !(withActions && activePage > 1)
+          }
+      )} onClick={() => onChangePage(activePage - 1)}>
+        <span className="page-link">Previous</span>
+      </li>
       {numbersForUl}
-      {withActions && realActivePage < totalItems / perPage && (
-        <li className="page-item" onClick={() => onChangePage(realActivePage + 1)}>Next</li>
-      )}
+        <li className={classNames("page-item",
+            {
+              'disabled': !(withActions && activePage < totalItems / perPage)
+            }
+        )} onClick={() => onChangePage(activePage + 1)}>
+          <span className="page-link">Next</span>
+        </li>
     </ul>
   );
 };

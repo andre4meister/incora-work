@@ -1,5 +1,4 @@
 import { FC } from "react";
-import "../Styles/App.scss";
 import classNames from "classnames";
 
 interface IPage {
@@ -13,11 +12,14 @@ interface IPage {
 }
 
 const Page: FC<IPage> = ({ page, onChangePage, activePage, classes }) => {
+
   return (
     <li
-      className={classNames(activePage === page ? classes?.activeBtn : classes?.btn, 'page-item')}
+      className={classNames('page-item', {
+        'active': activePage === page
+      })}
       onClick={() => onChangePage(page)}>
-      {page}
+        <span className="page-link">{page}</span>
     </li>
   );
 };

@@ -1,19 +1,14 @@
 import { Redirect, Route } from "react-router-dom";
 import { SettingsProps } from "./Settings";
+import React from "react";
 
-type Props = {
-  setPerPage: (page: number) => void;
-  perPage: number;
-};
 
-function PrivateRoute(login: boolean, Component: React.ElementType<SettingsProps>, props: Props) {
-  const onValueChange: (page: number) => void = props.setPerPage;
-  const perPage: number = props.perPage;
+function PrivateRoute(login: boolean, Component: React.ElementType<SettingsProps>, props: SettingsProps) {
 
   return (
     <Route>
       {login ? (
-        <Component perPage={perPage} onValueChange={onValueChange} />
+        <Component {...props} />
       ) : (
         <Redirect to='/task2' from='/settings' />
       )}

@@ -69,7 +69,7 @@ function App() {
                   <Posts posts={posts} />
                 </>
               </Route>
-              {PrivateSettings(login, Settings, { setPerPage, perPage })}
+              {PrivateSettings(login, Settings, {setPerPage, perPage })}
             </Switch>
           </div>
         </main>

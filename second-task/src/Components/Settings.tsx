@@ -1,14 +1,15 @@
 import { FC } from "react";
-interface SettingsProps {
-  onValueChange: (e: any) => void;
+export interface SettingsProps {
+  setPerPage: (elementsPerPage: number) => void;
   perPage: number;
 }
 
-const Settings: FC<SettingsProps> = ({ perPage, onValueChange }) => {
+const Settings: FC<SettingsProps> = ({ perPage, setPerPage }) => {
   return (
     <div className='settings'>
-      <input type='range' value={perPage} onChange={(e) => onValueChange(+e.target.value > 3 ? e.target.value : 5)} />
-      <h4>TODOS per page: {perPage}</h4>
+        <label htmlFor="customRange1" className="form-label">TODOS per page: {perPage}</label>
+        <input type="range" className="form-range" id="customRange1" value={perPage}
+               onChange={(e) => setPerPage(+e.target.value > 3 ? +e.target.value : 5)}/>
     </div>
   );
 };

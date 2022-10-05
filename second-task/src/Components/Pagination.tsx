@@ -1,5 +1,6 @@
 import { FC } from "react";
 import Page from "./Page";
+import classNames from "classnames";
 
 export interface PaginationProps {
   activePage?: number;
@@ -31,10 +32,22 @@ const Pagination: FC<PaginationProps> = ({
   ));
 
   return (
-    <ul className='flex-ul'>
-      {withActions && activePage > 1 && <li onClick={() => onChangePage(activePage - 1)}>Previous</li>}
+    <ul className='justify-content-center pagination'>
+      <li className={classNames("page-item",
+          {
+            'disabled': !(withActions && activePage > 1)
+          }
+      )} onClick={() => onChangePage(activePage - 1)}>
+        <span className="page-link">Previous</span>
+      </li>
       {numbersForUl}
-      {withActions && activePage < totalItems / perPage && <li onClick={() => onChangePage(activePage + 1)}>Next</li>}
+        <li className={classNames("page-item",
+            {
+              'disabled': !(withActions && activePage < totalItems / perPage)
+            }
+        )} onClick={() => onChangePage(activePage + 1)}>
+          <span className="page-link">Next</span>
+        </li>
     </ul>
   );
 };

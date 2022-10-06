@@ -1,13 +1,12 @@
 import { FC } from "react";
-
-interface Post {
+export interface PostType {
   id: number;
   title: string;
   body: string;
 }
 
 interface PostsProps {
-  posts: Post[];
+  posts: PostType[];
 }
 
 const Posts: FC<PostsProps> = ({ posts }) => {

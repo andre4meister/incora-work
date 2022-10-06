@@ -1,53 +1,63 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import Page from "./Page";
 import classNames from "classnames";
-
+import { usePagination } from "../hooks/hooks";
+import { PagintaionDataType } from "./App";
 export interface PaginationProps {
-  activePage?: number;
   totalItems: number;
   perPage: number;
+  setPaginationData: (data: PagintaionDataType) => void;
   withActions?: boolean;
   classes?: {
     btn?: string;
     activeBtn?: string;
   };
-  onChangePage: (newPage: number) => void;
 }
 
 const Pagination: FC<PaginationProps> = ({
-  activePage = 1,
+  setPaginationData,
   perPage,
   totalItems,
-  onChangePage,
   classes = { btn: "btn", activeBtn: "activeBtn" },
   withActions = true
 }) => {
+  const { activePage, setActivePage, nextPage, prevPage } = usePagination(1);
+
+  useEffect(() => {
+    setPaginationData({ activePage, perPage });
+  }, [activePage, perPage]);
+
   const arrayNumber: number[] = [];
   for (let i = 1; i <= Math.ceil(totalItems / perPage); i++) {
     arrayNumber.push(i);
   }
 
   const numbersForUl = arrayNumber.map((page) => (
-    <Page page={page} key={page} activePage={activePage} classes={classes} onChangePage={onChangePage} />
+    <Page page={page} key={page} activePage={activePage} classes={classes} onChangePage={setActivePage} />
   ));
 
   return (
     <ul className='justify-content-center pagination'>
-      <li className={classNames("page-item",
-          {
-            'disabled': !(withActions && activePage > 1)
-          }
-      )} onClick={() => onChangePage(activePage - 1)}>
-        <span className="page-link">Previous</span>
+      <li
+        className={classNames("page-item", {
+          disabled: !(withActions && activePage > 1)
+        })}>
+        <button className='page-link' disabled={!(withActions && activePage > 1)} onClick={() => prevPage()}>
+          Previous
+        </button>
       </li>
       {numbersForUl}
-        <li className={classNames("page-item",
-            {
-              'disabled': !(withActions && activePage < totalItems / perPage)
-            }
-        )} onClick={() => onChangePage(activePage + 1)}>
-          <span className="page-link">Next</span>
-        </li>
+      <li
+        className={classNames("page-item", {
+          disabled: !(withActions && activePage < totalItems / perPage)
+        })}>
+        <button
+          disabled={!(withActions && activePage < totalItems / perPage)}
+          onClick={() => nextPage()}
+          className='page-link'>
+          Next
+        </button>
+      </li>
     </ul>
   );
 };

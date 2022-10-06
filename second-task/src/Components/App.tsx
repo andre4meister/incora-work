@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
-import Posts from "./Posts";
+import Posts, { PostType } from "./Posts";
 import Settings from "./Settings";
 import PrivateSettings from "./PrivateSettings";
-import { fetchPosts } from "../index";
+import { fetchPosts } from "../api/api";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { User } from "../Task1/User";
 import { Task } from "../Task1/Task";
@@ -18,6 +18,10 @@ export interface Todo {
   title: string;
   body: string;
 }
+export type PagintaionDataType = {
+  activePage: number;
+  perPage: number;
+};
 
 const classesForPages = {
   btn: "btn",
@@ -25,19 +29,26 @@ const classesForPages = {
 };
 
 function App() {
-  const onChangePage = (page: number) => {
-    setActivePage(page);
-  };
-
-  const [activePage, setActivePage] = useState<number>(1);
-  const [perPage, setPerPage] = useState<number>(9);
-  const [posts, setPosts] = useState<Todo[]>([]);
-  const [totalItems, setTotalItems] = useState<number>(0);
   const [login, setLogin] = useState<boolean>(false);
+  const [posts, setPosts] = useState<PostType[]>([]);
+  const [perPage, setPerPage] = useState<number>(9);
+  const [totalItems, setTotalItems] = useState<number>(0);
+  const [paginationData, setPaginationData] = useState<PagintaionDataType>({
+    activePage: 1,
+    perPage
+  });
 
   useEffect(() => {
-    fetchPosts(activePage, perPage, setPosts,setTotalItems);
-  }, [activePage, perPage]);
+    const perPage: number = paginationData.perPage;
+    const activePage: number = paginationData.activePage;
+
+    fetchPosts(paginationData.activePage, paginationData.perPage).then((res) => {
+      setPosts(
+        res.data.filter((todo: Todo) => todo.id > (activePage - 1) * perPage && todo.id <= activePage * perPage)
+      );
+      setTotalItems(res.data.length);
+    });
+  }, [paginationData.activePage, paginationData.perPage]);
 
   return (
     <Router>
@@ -49,7 +60,7 @@ function App() {
         </header>
 
         <main className='main row justify-content-center p-0 m-0 min-vh-90'>
-          <Navbar/>
+          <Navbar />
           <div className='content col-10'>
             <Switch>
               <Route path='/task1'>
@@ -59,17 +70,16 @@ function App() {
               <Route path='/task2'>
                 <>
                   <Pagination
-                    activePage={activePage}
-                    totalItems={totalItems}
                     perPage={perPage}
-                    onChangePage={onChangePage}
+                    totalItems={totalItems}
+                    setPaginationData={setPaginationData}
                     classes={classesForPages}
                     withActions={true}
                   />
                   <Posts posts={posts} />
                 </>
               </Route>
-              {PrivateSettings(login, Settings, {setPerPage, perPage })}
+              {PrivateSettings(login, Settings, { setPerPage, perPage })}
             </Switch>
           </div>
         </main>
@@ -79,7 +89,7 @@ function App() {
         </footer>
       </div>
     </Router>
-  )
+  );
 }
 
 export default App;

@@ -2,22 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./Components/App";
 import reportWebVitals from "./reportWebVitals";
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { Todo } from "./Components/App";
-import axios from "axios";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
-
-export const fetchPosts = async (
-  activePage: number,
-  perPage: number,
-  setPosts: (todosArray: Todo[]) => void,
-  setTotalItems: (todosLength: number) => void
-) => {
-  const res = await axios.get(`https://jsonplaceholder.typicode.com/posts?page=${activePage}`);
-  setPosts(res.data.filter((todo: Todo) => todo.id > (activePage - 1) * perPage && todo.id <= activePage * perPage));
-  setTotalItems(res.data.length);
-};
 
 root.render(
   <React.StrictMode>
